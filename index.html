@@ -9,7 +9,32 @@
 </head>
 <body>
     <div id="card-container">
-        
+        <dialog id="dialog">
+            <form id="form">
+                <p>
+                    <label for="title">Title:</label>
+                    <input name="title" id="title" type="text" required>
+                </p>
+                <p>
+                    <label for="author">Author:</label>
+                    <input name="author" id="author" type="text" required>
+                </p>
+                <p>
+                    <label for="pages">Pages:</label>
+                    <input name="pages" id="pages" type="number" required>
+                </p><p>
+                    <label for="read-status">Read:</label>
+                    <input name="read-status" id="read-status" type="number" required>
+                </p>
+                <div>
+                    <button formmethod="dialog" formnovalidate>Cancel</button>
+                    <button id="confirm">Confirm</button>
+                </div>
+            </form>
+        </dialog>
+    </div>
+    <div>
+        <button id="show-dialog">+</button>
     </div>
 </body>
 </html>

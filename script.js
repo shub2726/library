@@ -5,23 +5,24 @@ function Book(title, author, pages, hasRead) {
     this.author = author;
     this.pages = pages;
     this.hasRead = hasRead;
-    // this.info = function () {
-    //     let str = title + " by " + author + ", " + pages + " pages, ";
-    //     str += hasRead ? "done reading" : "not read yet"
-    //     return str;
-    // }
 }
 
-function addBookToLibrary() {
-    const book = new Book("Wimpy Kid", "Jeff Kinney", 220, 0);
+function addBookToLibrary(title, author, pages, readStatus) {
+    const book = new Book(title, author, pages, readStatus);
     myLibrary.push(book);
-    const book2 = new Book("Wimp Kid", "Jeff Kinney", 220, 1);
-    myLibrary.push(book2);
+    displayLibrary();
 }
 
 function displayLibrary() {
+    const container = document.getElementById('card-container');
+    const removeCards = Array.from(container.children);
+    removeCards.forEach(card => {
+        if (card.classList.contains('card')) {
+            console.log(card);
+            card.remove();
+        }
+    })
     for (let i = 0; i < myLibrary.length; i++) {
-        const container = document.getElementById('card-container');
         let newCard = document.createElement("div");
         newCard.classList.add("card");
         let titleField = document.createElement("div");
@@ -32,13 +33,66 @@ function displayLibrary() {
         pageField.innerText = myLibrary[i].pages;
         let readStatusField = document.createElement("div");
         readStatusField.innerText = myLibrary[i].hasRead;
+        let readToggleButton = document.createElement("button");
+        readToggleButton.innerText = myLibrary[i].hasRead ? "Not Read" : "Read";
+        readToggleButton.classList.add('readToggleButton');
+        let deleteButton = document.createElement("button");
+        deleteButton.innerText = "Delete";
+        deleteButton.classList.add('delete');
         newCard.append(titleField);
         newCard.append(authorField);
         newCard.append(pageField);
         newCard.append(readStatusField);
+        newCard.append(readToggleButton);
+        newCard.append(deleteButton);
+        newCard.setAttribute("data-index-number", i);
         container.append(newCard);
     }
 }
 
-addBookToLibrary();
 displayLibrary();
+
+document.getElementById('card-container').addEventListener('click', (event) => {
+    const target = event.target;
+
+    // Handle readToggleButton clicks
+    if (target.classList.contains('readToggleButton')) {
+        let prev = target.previousElementSibling;
+        prev.innerText = parseInt(prev.innerText) ? 0 : 1;
+        target.innerText = parseInt(prev.innerText) ? "Not Read" : "Read";
+    }
+
+    // Handle deleteButton clicks
+    if (target.classList.contains('delete')) {
+        const card = target.closest('.card');
+        const index = parseInt(card.dataset.indexNumber);
+        myLibrary.splice(index, 1);
+
+        // Update data-index-number for remaining cards
+        const cards = Array.from(document.getElementsByClassName('card'));
+        cards.forEach((card, i) => {
+            card.dataset.indexNumber = i;
+        });
+
+        card.remove();
+    }
+});
+
+let dialogButton = document.getElementById('show-dialog');
+const dialogBox = document.getElementById('dialog');
+const confirmButton = document.getElementById('confirm');
+const form = document.getElementById('form');
+
+dialogButton.addEventListener('click', () => {
+    dialogBox.showModal();
+});
+
+confirmButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    addBookToLibrary(document.getElementById('title').value,
+        document.getElementById('author').value,
+        document.getElementById('pages').value,
+        document.getElementById('read-status').value,
+    );
+    dialogBox.close();
+})
