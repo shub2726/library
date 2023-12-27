@@ -71,7 +71,7 @@ document.getElementById('card-container').addEventListener('click', (event) => {
         // Update data-index-number for remaining cards
         const cards = Array.from(document.getElementsByClassName('card'));
         cards.forEach((card, i) => {
-            card.dataset.indexNumber = i;
+            if (card.dataset.indexNumber > target.parentElement.dataset.indexNumber) card.dataset.indexNumber--;
         });
 
         card.remove();
@@ -90,9 +90,9 @@ dialogButton.addEventListener('click', () => {
 confirmButton.addEventListener('click', (event) => {
     event.preventDefault();
     addBookToLibrary(document.getElementById('title').value,
-        document.getElementById('author').value,
-        document.getElementById('pages').value,
-        document.getElementById('read-status').value,
-    );
+                    document.getElementById('author').value,
+                    document.getElementById('pages').value,
+                    document.getElementById('read-status').value,
+                    );
     dialogBox.close();
 })
